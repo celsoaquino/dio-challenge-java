@@ -6,7 +6,6 @@ import com.celsoaquino.diochallengejava.dto.post.PostResponseDTO;
 import com.celsoaquino.diochallengejava.dto.user.UserDTO;
 import com.celsoaquino.diochallengejava.dto.user.UserResponseDTO;
 import com.celsoaquino.diochallengejava.dto.user.UserWithPostsDTO;
-import com.celsoaquino.diochallengejava.model.User;
 import com.celsoaquino.diochallengejava.repository.PostRepository;
 import com.celsoaquino.diochallengejava.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,7 +30,7 @@ public class UserService {
     }
 
     public UserWithPostsDTO getUserWithPostsAndComments(Long userId) {
-        User user = userRepository.findById(userId)
+        var user = userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id " + userId));
 
         List<PostResponseDTO> posts = postRepository.findByUserId(user.getId())
@@ -43,15 +42,15 @@ public class UserService {
     }
 
 
-    public List<UserDTO> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         return userRepository.findAll().stream()
-            .map(userMapper::toDTO)
+            .map(userMapper::toResponseDTO)
             .toList();
     }
 
-    public UserDTO getUserById(Long id) {
+    public UserResponseDTO getUserById(Long id) {
         return userRepository.findById(id)
-            .map(userMapper::toDTO)
+            .map(userMapper::toResponseDTO)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id " + id));
     }
 

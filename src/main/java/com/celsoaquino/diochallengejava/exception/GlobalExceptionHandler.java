@@ -1,7 +1,6 @@
 package com.celsoaquino.diochallengejava.exception;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Validation;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,7 @@ public class GlobalExceptionHandler {
             .stream()
             .map(error -> error.getField() + ": " + error.getDefaultMessage())
             .toList();
-        ApiError apiError = new ApiError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value()
-            , HttpStatus.BAD_REQUEST.name(), errorList);
+        ApiError apiError = new ApiError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), errorList);
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
@@ -38,5 +36,4 @@ public class GlobalExceptionHandler {
         ApiError apiError = new ApiError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), List.of(ex.getMessage()));
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
-
 }

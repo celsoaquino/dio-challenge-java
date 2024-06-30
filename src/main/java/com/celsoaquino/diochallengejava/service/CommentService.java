@@ -1,12 +1,12 @@
 package com.celsoaquino.diochallengejava.service;
 
 import com.celsoaquino.diochallengejava.dto.comment.CommentDTO;
+import com.celsoaquino.diochallengejava.dto.comment.CommentResponseDTO;
 import com.celsoaquino.diochallengejava.model.Comment;
-import com.celsoaquino.diochallengejava.model.Post;
 import com.celsoaquino.diochallengejava.repository.CommentRepository;
 import com.celsoaquino.diochallengejava.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,13 +20,20 @@ public class CommentService {
         this.postRepository = postRepository;
     }
 
-    public CommentDTO createComment(CommentDTO commentDTO) {
-        Post post = postRepository.findById(commentDTO.postId())
-            .orElseThrow(EntityNotFoundException::new);
+    public CommentResponseDTO createComment(CommentDTO commentDTO) {
+        var post = postRepository.findById(commentDTO.postId())
+            .orElseThrow(() -> new EntityNotFoundException("Post not found"));
         Comment comment = new Comment();
         comment.setContent(commentDTO.content());
         comment.setPost(post);
         commentRepository.save(comment);
-        return commentDTO;
+        return new CommentResponseDTO(post.getId(), post.getTitle(), comment.getId());
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId) {
+        var comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+        commentRepository.delete(comment);
     }
 }
