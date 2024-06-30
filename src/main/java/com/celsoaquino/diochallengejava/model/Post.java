@@ -13,13 +13,13 @@ public class Post {
     private Long id;
     private String title;
     private String content;
-    private LocalDateTime createdIn;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     public Long getId() {
@@ -46,12 +46,12 @@ public class Post {
         this.content = content;
     }
 
-    public LocalDateTime getCreatedIn() {
-        return createdIn;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedIn(LocalDateTime createdIn) {
-        this.createdIn = createdIn;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public User getUser() {
