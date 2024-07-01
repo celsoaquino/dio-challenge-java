@@ -27,7 +27,7 @@ public class CommentService {
         comment.setContent(commentDTO.content());
         comment.setPost(post);
         commentRepository.save(comment);
-        return new CommentResponseDTO(post.getId(), post.getTitle(), comment.getId());
+        return new CommentResponseDTO(comment.getId(), comment.getContent(), comment.getPost().getId());
     }
 
     @Transactional
